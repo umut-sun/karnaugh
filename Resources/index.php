@@ -1,3 +1,5 @@
+<?php include_once "include/parser.php";?>
+
 <!-- Copyright (C) 2014 João Rafael.  
 João Email: joaoraf[ at ]me.com
 
@@ -42,6 +44,8 @@ GNU General Public License for more details.
 					<input type="radio" onClick="ToggleDontCare()" ID="AllowDontCareCB" name="care" class="dark remove-bottom">
 					Allow Don't Care
 				</label>
+
+				<div style="color: white"><?php new Parser; ?></div>
 			</div>
 		</div>
 	</div>
@@ -53,9 +57,18 @@ GNU General Public License for more details.
 			
 
 	    	<div class="sixteen columns well add-bottom">    
-			<input type="text" class="half-bottom full-width pull-center">
+				<form action="" method="post">
+					<div class="fifteen columns">
+						<input type="text" class="half-bottom full-width pull-center" name="equation">
+					</div>
+					<div class="one column">
+						<input type="submit" class="small blue button full-width half-bottom" value="Go" style="margin-top: 1px;">
+					</div>
+				</form>
+
 				<div id="EquationDiv">
 				</div>        
+			
 			</div>
 
 		    <div class="eight columns add-bottom">    
