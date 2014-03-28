@@ -831,9 +831,3 @@ function PageParameter( Name )
 	return "";
 }
 
-function Init()
-{
-	SetInnerHTML("KarnoMapDiv", GenerateKarnoMapHTML());
-	SetInnerHTML("EquationDiv", GenerateEquationHTML());
-	SetInnerHTML("TruthTablenDiv", GenerateTruthTableHTML());
-}

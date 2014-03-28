@@ -80,9 +80,7 @@ document.getElementById('equation').addEventListener('change', function() {
 		}
 		
 	}else{
-
-		// invalid input event
-	
+		alert("Invalid input");
 	}
 
 });
