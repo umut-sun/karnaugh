@@ -52,9 +52,9 @@ Equation[0].Expression="0";
 // initialize the truth table and kmap structure for the given number of variables
 function InitializeTables(VarCount)
 {
+	console.log('InitializeTables', VarCount);
 	TruthTable = new Array();
 	KMap = new Array();							
-
 	VariableCount = VarCount;
 	KMap.Width=Width[VariableCount];
 	KMap.Height=Height[VariableCount];
@@ -127,7 +127,7 @@ function RectHighlightColor( Value )
 }
 
 // init code (setup display according to query parameters)
-function Load()
+function Load() //sayfa açıldığında linkte variables ya da dontcare var ise onun değerine linkte yazanı yazar
 {
 	if (PageParameter("Variables")=="3")
 	{
@@ -151,7 +151,7 @@ function Load()
 	}
 }
 
-window.onload = Load;
+window.onload = Load;    //sayfa yüklendiğinde Load fonksiyonunu çalıştır
 
 // constructs a Rect type
 function CreateRect( x,y,w,h )
@@ -823,7 +823,13 @@ function ToggleDontCare()
 function PageParameter( Name )
 {
 	var Regex = new RegExp( "[\\?&]"+Name+"=([^&#]*)" );
+	console.log(Regex);
+    console.log(new Date().getTime());
+	console.log(window.location.href);
 	var Results = Regex.exec( window.location.href );
+	console.log(Results);
+	
+	//linkin içinde Variables ya da DontCare var mı diye kontrol edip var ise onun değerini işaretliyor(radiobutton)
 	if( Results != null )
 	{
 		return Results[1];
