@@ -103,3 +103,11 @@ document.getElementById('equation').addEventListener('change', function() {
     alert('Invalid input');
   }
 });
+
+document.getElementById('equation').addEventListener('keyup', function(event) {
+	//console.log("tiklanan keycode: "+event.keyCode);
+	// Number 13 is the "Enter" key on the keyboard
+	if (event.keyCode == 13) {
+    document.getElementById('equation').dispatchEvent(new Event('change'));
+  }
+});
