@@ -17,7 +17,7 @@ function CountVar(s) {
 
   return rv.length;
 }
-
+//değişiklik yapıldı
 // loop to replace the variables with the truth table value
 function replaceVar(expression) {
   for (var i = 0; i < TruthTable.length; i++) {
