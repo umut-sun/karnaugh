@@ -543,6 +543,19 @@ function GetElement(Name) {
 
 function SetInnerHTML(Name, Text) {
   GetElement(Name).innerHTML = Text;
+  document.querySelectorAll('.blue.button').forEach(function(element, index) {
+    (function(i) {
+      element.addEventListener('click', function() {
+        if (!hasClass(this, 'clicked')) {
+          this.classList.add('clicked');
+          SetShowRect(Equation[i], i);
+        } else {
+          this.classList.remove('clicked');
+          SetShowRect(null);
+        }
+      });
+    })(index);
+  });
 }
 
 function SetBackgroundColor(Name, Color) {
@@ -677,11 +690,11 @@ function GenerateEquationHTML() {
       Text +=
         '<span class="blue button half-bottom" id="' +
         Equation[i].ButtonUIName +
-        '" onMouseOver="SetShowRect(Equation[' +
+        '" onclick="SetShowRect(Equation[' +
         i +
         '],' +
         i +
-        ');" onMouseOut="SetShowRect(null);" style="padding:5px">';
+        ');" style="padding:5px">';
       Text += '<b>' + Equation[i].Expression + '</span>';
       if (i < Equation.UsedLength - 1) Text += ' <span> + </span>';
       i++;
@@ -690,7 +703,9 @@ function GenerateEquationHTML() {
   }
   return Text;
 }
-
+function hasClass(element, cls) {
+  return (' ' + element.className + ' ').indexOf(' ' + cls + ' ') > -1;
+}
 function ChangeVariableNumber(Num) {
   InitializeTables(Num);
   ClearEquation();
