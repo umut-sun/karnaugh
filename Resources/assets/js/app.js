@@ -707,7 +707,7 @@ function hasClass(element, cls) {
   return (' ' + element.className + ' ').indexOf(' ' + cls + ' ') > -1;
 }
 
-
+//input'a sadece A,B,C,D,!,(,),+ girilmesi
 document.addEventListener("input", function () {
 	if(document.getElementById("equation").value.length > 0){
       var pattern = /(A|a|B|b|C|c|D|d|\!|\+|\(|\))/g;
