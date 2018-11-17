@@ -706,6 +706,17 @@ function GenerateEquationHTML() {
 function hasClass(element, cls) {
   return (' ' + element.className + ' ').indexOf(' ' + cls + ' ') > -1;
 }
+
+
+document.addEventListener("input", function () {
+	if(document.getElementById("equation").value.length > 0){
+      var pattern = /(A|a|B|b|C|c|D|d|\!|\+|\(|\))/g;
+      var matched = document.getElementById("equation").value.match(pattern);
+      if(matched && matched[0]){
+          document.getElementById("equation").value = matched.join('');
+      }
+    }
+});
 function ChangeVariableNumber(Num) {
   InitializeTables(Num);
   ClearEquation();
