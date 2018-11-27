@@ -1,43 +1,23 @@
-// Copyright (C) 2014 João Rafael.
-// 	  João Rafael Email:    joaoraf[ at ]me.com
-//
-// 	  This is a adapted file from KARNAUGH MAP EXPLORER 2.0, created by Mike Sandige and Richard Sandige
-// 	  COPYRIGHT(C) 2011 | GNU General Public License
-// 	  URL: http://www.ee.calpoly.edu/media/uploads/resources/KarnaughExplorer_1.html
-// 	  Mike Sandige Email:    mike_s_101[ at ]hotmail.com
-// 	  Richard Sandige Email: rsandige[ at ]calpoly.edu
-//
-// This program is free software; you can redistribute it and/or
-// modify it under the terms of the GNU General Public License version 2
-// as published by the Free Software Foundation;
-
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-
-// for a good javascript reference, see http://wp.netscape.com/eng/mozilla/3.0/handbook/javascript/
-
 // Constants
-var MaxVariableCount = 4;
-var VariableNames = new Array('A', 'B', 'C', 'D');
-var Width = new Array(0, 2, 2, 4, 4); // width of Kmap for each VariableCount
-var Height = new Array(0, 2, 2, 2, 4); // height of Kmap for each VariableCount
-var BitOrder = new Array(0, 1, 3, 2); // bits across and down Kmap
-var BackgroundColor = 'white';
-var AllowDontCare = false; // true doesn't guarantee a minimal solution
-var DontCare = 'X';
+const MaxVariableCount = 4;
+const VariableNames = new Array('A', 'B', 'C', 'D');
+const Width = new Array(0, 2, 2, 4, 4); // width of Kmap for each VariableCount
+const Height = new Array(0, 2, 2, 2, 4); // height of Kmap for each VariableCount
+const BitOrder = new Array(0, 1, 3, 2); // bits across and down Kmap
+const BackgroundColor = 'white';
+const AllowDontCare = false; // true doesn't guarantee a minimal solution
+const DontCare = 'X';
 
 // Variables (initialized here)
-var VariableCount = 2; //1..4
-var TruthTable = new Array(); // truth table structure[row][variable]
-var KMap = new Array(); // KMap[across][down]
-var Equation = new Array(); // solution results
-var FunctionText = ''; // F(ABC)=
-var EquationHighlightColor = 'rgb(243,194,86)';
-var Heavy = 20;
+let VariableCount = 2; //1..4
+let TruthTable = new Array(); // truth table structure[row][variable]
+let KMap = new Array(); // KMap[across][down]
+let Equation = new Array(); // solution results
+let FunctionText = ''; // F(ABC)=
+let EquationHighlightColor = 'rgb(243,194,86)';
+let Heavy = 20;
 
-for (i = 0; i < Math.pow(2, MaxVariableCount); i++) {
+for (let i = 0; i < Math.pow(2, MaxVariableCount); i++) {
   Equation[i] = new Array(); // for each term in result function
   Equation[i].ButtonUIName = 'EQ' + i; // used to generate HTML IDs
   Equation[i].Expression = ''; // HTML text for term
@@ -57,13 +37,13 @@ function InitializeTables(VarCount) {
   KMap.Width = Width[VariableCount];
   KMap.Height = Height[VariableCount];
 
-  for (i = 0; i < Math.pow(2, VariableCount); i++) {
+  for (let i = 0; i < Math.pow(2, VariableCount); i++) {
     TruthTable[i] = new Array();
     TruthTable[i].Index = i;
     TruthTable[i].Name = i.toString(2);
     TruthTable[i].ButtonUIName = 'TT' + TruthTable[i].Name;
     TruthTable[i].TTROWUIName = 'TTROW' + TruthTable[i].Name;
-    for (j = 0; j < Math.pow(2, VariableCount); j++) {
+    for (let j = 0; j < Math.pow(2, VariableCount); j++) {
       TruthTable[i][j] = new Array();
       TruthTable[i][j].Variable = (i & (1 << (VariableCount - (1 + j))) ? 1 : 0) ? true : false;
       TruthTable[i][j].Name = VariableNames[j];
@@ -74,9 +54,9 @@ function InitializeTables(VarCount) {
   KMap.XVariables = KMap.Width / 2;
   KMap.YVariables = KMap.Height / 2;
 
-  for (w = 0; w < KMap.Width; w++) {
+  for (let w = 0; w < KMap.Width; w++) {
     KMap[w] = new Array();
-    for (h = 0; h < KMap.Height; h++) {
+    for (let h = 0; h < KMap.Height; h++) {
       KMap[w][h] = new Array();
       KMap[w][h].Value = false;
       mapstr =
@@ -88,14 +68,14 @@ function InitializeTables(VarCount) {
       KMap[w][h].TDUIName = 'TD' + KMap[w][h].TruthTableEntry.Name;
       KMap[w][h].Covered = false;
       KMap[w][h].Variable = new Array();
-      for (i = 0; i < VariableCount; i++) {
+      for (let i = 0; i < VariableCount; i++) {
         KMap[w][h].Variable[i] = KMap[w][h].TruthTableEntry[i].Variable;
       }
     }
   }
 
   FunctionText = 'ƒ(';
-  for (i = 0; i < VariableCount; i++) {
+  for (let i = 0; i < VariableCount; i++) {
     FunctionText += VariableNames[i];
   }
   FunctionText += ')';
@@ -138,7 +118,7 @@ window.onload = Load; //sayfa yüklendiğinde Load fonksiyonunu çalıştır
 
 // constructs a Rect type
 function CreateRect(x, y, w, h) {
-  var Obj = new Array();
+  let Obj = new Array();
   Obj.x = x;
   Obj.y = y;
   Obj.w = w;
@@ -160,11 +140,9 @@ function Compare(Value1, Value2) {
 // Assumes top left of Rect is within the KMap.
 // Assumes Rect is not larger than KMap
 function TestRect(Rect, TestValue) {
-  var dx = 0;
-  var dy = 0;
-  for (dx = 0; dx < Rect.w; dx++) {
-    for (dy = 0; dy < Rect.h; dy++) {
-      var Test = KMap[(Rect.x + dx) % KMap.Width][(Rect.y + dy) % KMap.Height].Value;
+  for (let dx = 0; dx < Rect.w; dx++) {
+    for (let dy = 0; dy < Rect.h; dy++) {
+      let Test = KMap[(Rect.x + dx) % KMap.Width][(Rect.y + dy) % KMap.Height].Value;
       if (!Compare(TestValue, Test)) {
         return false;
       }
@@ -176,10 +154,8 @@ function TestRect(Rect, TestValue) {
 // Returns true if for every square of the Rect in the KMap, the .Covered flag is set
 //    or the value of the square is don't care.
 function IsCovered(Rect) {
-  var dx = 0;
-  var dy = 0;
-  for (dx = 0; dx < Rect.w; dx++) {
-    for (dy = 0; dy < Rect.h; dy++) {
+  for (let dx = 0; dx < Rect.w; dx++) {
+    for (let dy = 0; dy < Rect.h; dy++) {
       if (!KMap[(Rect.x + dx) % KMap.Width][(Rect.y + dy) % KMap.Height].Covered) {
         //treat dont care's as already covered
         if (!(KMap[(Rect.x + dx) % KMap.Width][(Rect.y + dy) % KMap.Height].Value == DontCare)) {
@@ -193,10 +169,8 @@ function IsCovered(Rect) {
 
 // Sets the .Covered flag for every square of the Rect in the KMap
 function Cover(Rect, IsCovered) {
-  var dx = 0;
-  var dy = 0;
-  for (dx = 0; dx < Rect.w; dx++) {
-    for (dy = 0; dy < Rect.h; dy++) {
+  for (let dx = 0; dx < Rect.w; dx++) {
+    for (let dy = 0; dy < Rect.h; dy++) {
       KMap[(Rect.x + dx) % KMap.Width][(Rect.y + dy) % KMap.Height].Covered = IsCovered;
     }
   }
@@ -210,13 +184,11 @@ function SearchRect(w, h, TestValue, Found, DoCover) {
     return; // rect is too large
   }
 
-  var x = 0;
-  var y = 0;
-  var across = KMap.Width == w ? 1 : KMap.Width;
-  var down = KMap.Height == h ? 1 : KMap.Height;
-  for (x = 0; x < across; x++) {
-    for (y = 0; y < down; y++) {
-      var Rect = CreateRect(x, y, w, h);
+  let across = KMap.Width == w ? 1 : KMap.Width;
+  let down = KMap.Height == h ? 1 : KMap.Height;
+  for (let x = 0; x < across; x++) {
+    for (let y = 0; y < down; y++) {
+      let Rect = CreateRect(x, y, w, h);
       if (TestRect(Rect, TestValue)) {
         if (!IsCovered(Rect)) {
           Found[Found.length] = Rect;
@@ -231,9 +203,8 @@ function SearchRect(w, h, TestValue, Found, DoCover) {
 //  cover something in the KMap and which don't (because previous ones already
 //  have covered enough).  Adds rects that do cover something to the Used array.
 function TryRects(Rects, Used) {
-  var j = 0;
-  for (j = 0; j < Rects.length; j++) {
-    var Rect = Rects[j];
+  for (let j = 0; j < Rects.length; j++) {
+    let Rect = Rects[j];
     if (TestRect(Rect, true)) {
       if (!IsCovered(Rect)) {
         Used[Used.length] = Rect;
@@ -245,10 +216,8 @@ function TryRects(Rects, Used) {
 
 // Adds the given Weight to every element of the Weights map that corresponds to the Rect.
 function AddRectWeight(Weights, Rect, Weight) {
-  var dx = 0;
-  var dy = 0;
-  for (dx = 0; dx < Rect.w; dx++) {
-    for (dy = 0; dy < Rect.h; dy++) {
+  for (let dx = 0; dx < Rect.w; dx++) {
+    for (let dy = 0; dy < Rect.h; dy++) {
       Weights[(Rect.x + dx) % KMap.Width][(Rect.y + dy) % KMap.Height] += Weight;
     }
   }
@@ -257,11 +226,9 @@ function AddRectWeight(Weights, Rect, Weight) {
 // Retrieves a weight value of a rect, by summing the weight of each square in the Weights
 // map that correspond to the Rect
 function GetRectWeight(Weights, Rect) {
-  var dx = 0;
-  var dy = 0;
-  var W = 0;
-  for (dx = 0; dx < Rect.w; dx++) {
-    for (dy = 0; dy < Rect.h; dy++) {
+  let W = 0;
+  for (let dx = 0; dx < Rect.w; dx++) {
+    for (let dy = 0; dy < Rect.h; dy++) {
       W += Weights[(Rect.x + dx) % KMap.Width][(Rect.y + dy) % KMap.Height];
     }
   }
@@ -286,17 +253,16 @@ function OverlappingRects(R1, R2) {
 // subset of those Rects that cover the same squares
 function FindBestCoverage(Rects, AllRects) {
   // create a 'Weight' map
-  var Weights = new Array();
-  for (w = 0; w < KMap.Width; w++) {
+  let Weights = new Array();
+  for (let w = 0; w < KMap.Width; w++) {
     Weights[w] = new Array();
-    for (h = 0; h < KMap.Height; h++) {
+    for (let h = 0; h < KMap.Height; h++) {
       // initial weight is 0 if not already covered, high if already covered
       Weights[w][h] = KMap[w][h].Covered ? Heavy : 0;
     }
   }
   // seed the weight map with 1 for every square covered by every Rect
-  var i = 0;
-  for (i = 0; i < Rects.length; i++) {
+  for (let i = 0; i < Rects.length; i++) {
     AddRectWeight(Weights, Rects[i], 1);
   }
 
@@ -306,10 +272,9 @@ function FindBestCoverage(Rects, AllRects) {
   // weight of any squares for Rects that overlap the selected Rect.  This has the
   // effect of pushing the rects that duplicate KMap coverage to the back of the list,
   // while bubbling non-overlapping maximal covering rects to the front.
-  var SortedRects = new Array();
+  let SortedRects = new Array();
   while (Rects.length > 0) {
-    var j = 0;
-    for (j = 0; j < Rects.length; j++) {
+    for (let j = 0; j < Rects.length; j++) {
       // get the weight for the remaining Rects
       Rects[j].Weight = GetRectWeight(Weights, Rects[j]);
     }
@@ -324,7 +289,7 @@ function FindBestCoverage(Rects, AllRects) {
     AddRectWeight(Weights, Rects[0], Heavy);
 
     // Reduce the weight for Rects that overlap the selected Rect
-    for (j = 0; j < Rects.length; j++) {
+    for (let j = 0; j < Rects.length; j++) {
       if (OverlappingRects(Rects[0], Rects[j])) {
         AddRectWeight(Weights, Rects[j], -1);
       }
@@ -339,7 +304,7 @@ function FindBestCoverage(Rects, AllRects) {
 
 //Finds the minimized equation for the current KMap.
 function Search() {
-  var Rects = new Array();
+  let Rects = new Array();
   Cover(CreateRect(0, 0, KMap.Width, KMap.Height), false);
 
   // Find the (larger) rectangles that cover just the quares in the KMap
@@ -353,7 +318,7 @@ function Search() {
 
   // 2x1 sized rects  - These have to be handled specially in order to find a
   //  minimized solution.
-  var Rects2x1 = new Array();
+  let Rects2x1 = new Array();
   SearchRect(2, 1, true, Rects2x1, false);
   SearchRect(1, 2, true, Rects2x1, false);
   FindBestCoverage(Rects2x1, Rects);
@@ -363,7 +328,7 @@ function Search() {
 
   //check to see if any sets of (necessary) smaller rects fully cover larger ones (if so, the larger one is no longer needed)
   Cover(CreateRect(0, 0, KMap.Width, KMap.Height), false);
-  for (i = Rects.length - 1; i >= 0; i--) {
+  for (let i = Rects.length - 1; i >= 0; i--) {
     if (IsCovered(Rects[i])) {
       Rects[i] = null;
     } else {
@@ -372,7 +337,7 @@ function Search() {
   }
 
   ClearEquation();
-  for (i = 0; i < Rects.length; i++) {
+  for (let i = 0; i < Rects.length; i++) {
     if (Rects[i] != null) {
       RectToEquation(Rects[i]);
     }
@@ -385,7 +350,7 @@ function Search() {
 }
 
 function ClearEquation() {
-  for (i = 0; i < Equation.length; i++) {
+  for (let i = 0; i < Equation.length; i++) {
     Equation[i].Rect = null;
   }
   Equation.UsedLength = 0;
@@ -393,11 +358,9 @@ function ClearEquation() {
 
 // returns true if the rect is entirely within a singel given variable
 function IsConstantVariable(Rect, Variable) {
-  var dx = 0;
-  var dy = 0;
-  var topleft = KMap[Rect.x][Rect.y].Variable[Variable];
-  for (dx = 0; dx < Rect.w; dx++) {
-    for (dy = 0; dy < Rect.h; dy++) {
+  let topleft = KMap[Rect.x][Rect.y].Variable[Variable];
+  for (let dx = 0; dx < Rect.w; dx++) {
+    for (let dy = 0; dy < Rect.h; dy++) {
       test = KMap[(Rect.x + dx) % KMap.Width][(Rect.y + dy) % KMap.Height].Variable[Variable];
       if (test != topleft) {
         return false;
@@ -409,9 +372,8 @@ function IsConstantVariable(Rect, Variable) {
 
 // Turns a rectangle into a text minterm (in HTML)
 function RectToEquation(Rect) {
-  var Text = '';
-  var i = 0;
-  for (i = 0; i < VariableCount; i++) {
+  let Text = '';
+  for (let i = 0; i < VariableCount; i++) {
     if (IsConstantVariable(Rect, i)) {
       //	Text += VariableNames[i];
       //	if (!KMap[Rect.x][Rect.y].Variable[i])
@@ -446,9 +408,8 @@ function DisplayValue(bool) {
 
 // Turns a number into binary in text (prepends 0's to length 'bits')
 function BinaryString(value, bits) {
-  var str = value.toString(2);
-  var i = 0;
-  for (i = 0; i < bits; i++) {
+  let str = value.toString(2);
+  for (let i = 0; i < bits; i++) {
     if (str.length < bits) {
       str = '0' + str;
     }
@@ -458,9 +419,8 @@ function BinaryString(value, bits) {
 
 // redraws UI (with no highlights)
 function UpdateUI() {
-  var i = 0;
-  for (i = 0; i < TruthTable.length; i++) {
-    var Val = DisplayValue(TruthTable[i].KMapEntry.Value);
+  for (let i = 0; i < TruthTable.length; i++) {
+    let Val = DisplayValue(TruthTable[i].KMapEntry.Value);
     //Truth Table
 
     SetValue(TruthTable[i].ButtonUIName, Val);
@@ -511,14 +471,12 @@ function SetShowRect(EquationEntry, EquationIndex) {
     UpdateUI();
     return;
   } else {
-    var ShowRect = EquationEntry.Rect;
+    let ShowRect = EquationEntry.Rect;
 
-    var dx = 0;
-    var dy = 0;
-    for (dx = 0; dx < ShowRect.w; dx++) {
-      for (dy = 0; dy < ShowRect.h; dy++) {
-        var KMEntry = KMap[(ShowRect.x + dx) % KMap.Width][(ShowRect.y + dy) % KMap.Height];
-        var Val = DisplayValue(TruthTable[i].KMapEntry.Value);
+    for (let dx = 0; dx < ShowRect.w; dx++) {
+      for (let dy = 0; dy < ShowRect.h; dy++) {
+        let KMEntry = KMap[(ShowRect.x + dx) % KMap.Width][(ShowRect.y + dy) % KMap.Height];
+        let Val = DisplayValue(TruthTable[i].KMapEntry.Value);
         //KMap
         SetBackgroundColor(KMEntry.ButtonUIName, RectHighlightColor(Val));
         SetBackgroundColor(KMEntry.TDUIName, RectHighlightColor(Val));
@@ -567,29 +525,30 @@ function SetValue(Name, Value) {
 }
 
 function GenerateTruthTableHTML() {
-  var Text = '<table ID="TruthTableID" style="text-align:center">';
+  let Text = '<table ID="TruthTableID" style="text-align:center">';
   {
+    let count;
+    let color;
+
     Text = Text + '<thead style="background: rgb(49,60,78);text-align:center"><tr>';
-    var i = 0;
-    for (i = 0; i < VariableCount; i++) {
+    for (let i = 0; i < VariableCount; i++) {
       Text = Text + '<th>' + VariableNames[i] + '</th>';
     }
     Text = Text + '<th>' + FunctionText + '</th></tr></thead>';
 
-    for (i = 0; i < TruthTable.length; i++) {
+    for (let i = 0; i < TruthTable.length; i++) {
       if (i % 2 == 0) {
-        var count = 0.85;
+        count = 0.85;
       } else {
-        var count = 0.8;
+        count = 0.8;
       }
 
       Text += "<tr ID='" + TruthTable[i].TTROWUIName + '\' style="opacity: ' + count + '">';
-      var j = 0;
-      for (j = 0; j < VariableCount; j++) {
+      for (let j = 0; j < VariableCount; j++) {
         if (DisplayValue(TruthTable[i][j].Variable) == 1) {
-          var color = 'style="background-color: rgba(255,255,255,.3);font-weight: bold"';
+          color = 'style="background-color: rgba(255,255,255,.3);font-weight: bold"';
         } else {
-          var color = '';
+          color = '';
         }
 
         Text = Text + '<td ' + color + '>' + DisplayValue(TruthTable[i][j].Variable) + '</td>';
@@ -613,15 +572,17 @@ function GenerateTruthTableHTML() {
 }
 
 function GenerateKarnoMapHTML() {
-  var Text = '<table><thead><tr>';
-  var h, w;
+  let Text = '<table><thead><tr>';
+  let h, w;
+  let count;
+
   Text =
     Text +
     '<th colspan="2" ></th><th style="background: rgb(49,60,78);border-bottom:2px solid rgb(31, 39, 55)" colspan=' +
     KMap.Width +
     '>';
 
-  for (i = 0; i < KMap.XVariables; i++) {
+  for (let i = 0; i < KMap.XVariables; i++) {
     Text += VariableNames[i];
   }
 
@@ -629,7 +590,7 @@ function GenerateKarnoMapHTML() {
   Text += '<tbody><tr>';
   Text += '<th ></th><th style="border-left: none !important"></th>';
 
-  for (i = 0; i < KMap.Width; i++) {
+  for (let i = 0; i < KMap.Width; i++) {
     Text +=
       '<th class="header-color" style="background: rgb(49,60,78)">' +
       BinaryString(BitOrder[i], KMap.XVariables) +
@@ -639,9 +600,9 @@ function GenerateKarnoMapHTML() {
 
   for (h = 0; h < KMap.Height; h++) {
     if (h % 2 != 0) {
-      var count = 0.85;
+      count = 0.85;
     } else {
-      var count = 0.8;
+      count = 0.8;
     }
     Text = Text + '<tr style="opacity:' + count + '">';
     if (h == 0) {
@@ -681,11 +642,9 @@ function GenerateKarnoMapHTML() {
 }
 
 function GenerateEquationHTML() {
-  var j;
-  var i;
-  for (i = 0; i < Equation.UsedLength; ) {
-    var Text = '<p class="header-color remove-bottom">';
-    for (j = 0; j < 8 && i < Equation.UsedLength; j++) {
+  let Text = '<p class="header-color remove-bottom">';
+  for (let i = 0; i < Equation.UsedLength; ) {
+    for (let j = 0; j < 8 && i < Equation.UsedLength; j++) {
       if (i == 0) Text += '<b>' + FunctionText + ' = ';
       Text +=
         '<span class="blue button half-bottom" id="' +
@@ -708,14 +667,14 @@ function hasClass(element, cls) {
 }
 
 //input'a sadece A,B,C,D,!,(,),+ girilmesi
-document.addEventListener("input", function () {
-	if(document.getElementById("equation").value.length > 0){
-      var pattern = /(A|a|B|b|C|c|D|d|\!|\+|\(|\))/g;
-      var matched = document.getElementById("equation").value.match(pattern);
-      if(matched && matched[0]){
-          document.getElementById("equation").value = matched.join('');
-      }
+document.addEventListener('input', function() {
+  if (document.getElementById('equation').value.length > 0) {
+    let pattern = /(A|a|B|b|C|c|D|d|\!|\+|\(|\))/g;
+    let matched = document.getElementById('equation').value.match(pattern);
+    if (matched && matched[0]) {
+      document.getElementById('equation').value = matched.join('');
     }
+  }
 });
 function ChangeVariableNumber(Num) {
   InitializeTables(Num);
@@ -732,8 +691,7 @@ function ChangeVariableNumber(Num) {
 
 function ToggleDontCare() {
   AllowDontCare = !AllowDontCare;
-  var i = 0;
-  for (i = 0; i < TruthTable.length; i++) {
+  for (let i = 0; i < TruthTable.length; i++) {
     if (TruthTable[i].KMapEntry.Value == DontCare) {
       TruthTable[i].KMapEntry.Value = false;
     }
@@ -743,11 +701,11 @@ function ToggleDontCare() {
 }
 
 function PageParameter(Name) {
-  var Regex = new RegExp('[\\?&]' + Name + '=([^&#]*)');
+  let Regex = new RegExp('[\\?&]' + Name + '=([^&#]*)');
   console.log(Regex);
   console.log(new Date().getTime());
   console.log(window.location.href);
-  var Results = Regex.exec(window.location.href);
+  let Results = Regex.exec(window.location.href);
   console.log(Results);
 
   //linkin içinde Variables ya da DontCare var mı diye kontrol edip var ise onun değerini işaretliyor(radiobutton)

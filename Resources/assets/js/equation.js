@@ -1,10 +1,10 @@
 // count number of variables within the expression
-function CountVar(s) {
-  var chars = {},
-    rv = '';
-  var s = s.replace(/[^a-zA-Z]/g, ''); //a'dan z'ye A'dan Z'ye global arama yapar(küçük büyük harfe dikkat etmemesi için gi)
+function CountVar(str) {
+  let chars = {};
+  let rv = '';
+  let s = str.replace(/[^a-zA-Z]/g, ''); //a'dan z'ye A'dan Z'ye global arama yapar(küçük büyük harfe dikkat etmemesi için gi)
 
-  for (var i = 0; i < s.length; ++i) {
+  for (let i = 0; i < s.length; ++i) {
     if (!(s[i] in chars)) {
       //eğer girdinin i. karakteri chars dizisinde yoksa
       chars[s[i]] = 1;
@@ -17,10 +17,11 @@ function CountVar(s) {
 
   return rv.length;
 }
-//değişiklik yapıldı
+
+// değişiklik yapıldı
 // loop to replace the variables with the truth table value
 function replaceVar(expression) {
-  for (var i = 0; i < TruthTable.length; i++) {
+  for (let i = 0; i < TruthTable.length; i++) {
     string = expression.replace(/a/g, TruthTable[i][0].Variable);
     console.log(string);
     string = string.replace(/b/g, TruthTable[i][1].Variable);
@@ -37,17 +38,17 @@ document.getElementById('equation').addEventListener('change', function() {
   // check if input is valid
   if (isNaN(this.value) && this.value.match(/[0-9]/) == null) {
     //girilen değer sayı değilse işleme al
-    var strlower = this.value.toLowerCase();
+    let strlower = this.value.toLowerCase();
 
     console.log(strlower);
     //countvar fonksiyonuna gider
-    var varNum = CountVar(this.value);
+    let varNum = CountVar(this.value);
     //a-z olarak girilen harf sayısını döner
 
-    var func = strlower.split('+'); //aralarında + varsa onları bölüyor
+    let func = strlower.split('+'); //aralarında + varsa onları bölüyor
     console.log('func bu ', func);
 
-    for (var i = 0; i < func.length; i++) {
+    for (let i = 0; i < func.length; i++) {
       func[i] = func[i].trim(); //boşluklarını siler
 
       // put times(*)symbol between variables
@@ -74,9 +75,9 @@ document.getElementById('equation').addEventListener('change', function() {
 
     strlower = func.join(' | '); // bulduğu func stringlerini aralarına | ekleyerek birleştirdi
     console.log(strlower);
-    switch (
-      varNum //harf sayısını kontrol ediyor
-    ) {
+
+    //harf sayısını kontrol ediyor
+    switch (varNum) {
       case 4: //4 ise otomatik olarak 4 değişkeni seçiyor
         document.getElementById('FourVariableRB').click();
         replaceVar(strlower);
@@ -91,7 +92,6 @@ document.getElementById('equation').addEventListener('change', function() {
         //3 veya 4 değilse
         if (varNum < 3) {
           //3'ten küçükse iki değişkeni seçiyor
-
           document.getElementById('TwoVariableRB').click();
           replaceVar(strlower);
         } else if (varNum > 4) {
@@ -105,9 +105,9 @@ document.getElementById('equation').addEventListener('change', function() {
 });
 
 document.getElementById('equation').addEventListener('keyup', function(event) {
-	//console.log("tiklanan keycode: "+event.keyCode);
-	// Number 13 is the "Enter" key on the keyboard
-	if (event.keyCode == 13) {
+  //console.log("tiklanan keycode: "+event.keyCode);
+  // Number 13 is the "Enter" key on the keyboard
+  if (event.keyCode == 13) {
     document.getElementById('equation').dispatchEvent(new Event('change'));
   }
 });
