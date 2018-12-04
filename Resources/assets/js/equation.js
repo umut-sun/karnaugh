@@ -1,16 +1,18 @@
 // count number of variables within the expression
-function CountVar(str) {
+function CountVar(oldString) {
   let chars = {};
   let rv = '';
-  let s = str.replace(/[^a-zA-Z]/g, ''); //a'dan z'ye A'dan Z'ye global arama yapar(küçük büyük harfe dikkat etmemesi için gi)
+  //a'dan z'ye A'dan Z'ye global arama yapar(küçük büyük harfe dikkat etmemesi için gi)
+  let newString = oldString.replace(/[^a-zA-Z]/g, '');
 
-  for (let i = 0; i < s.length; ++i) {
-    if (!(s[i] in chars)) {
+  for (let i = 0; i < newString.length; ++i) {
+    if (!(newString[i] in chars)) {
       //eğer girdinin i. karakteri chars dizisinde yoksa
-      chars[s[i]] = 1;
+      chars[newString[i]] = 1;
       //console.log(s.length);
       console.log(chars);
-      rv += s[i]; //rv stringine s'nin i. karakterini ekler
+      //rv stringine s'nin i. karakterini ekler
+      rv += newString[i];
       console.log(rv);
     }
   }
@@ -42,7 +44,7 @@ document.getElementById('equation').addEventListener('change', function() {
 
     console.log(strlower);
     //countvar fonksiyonuna gider
-    let varNum = CountVar(this.value);
+    let varNum = CountVar(strlower);
     //a-z olarak girilen harf sayısını döner
 
     let func = strlower.split('+'); //aralarında + varsa onları bölüyor
@@ -88,19 +90,21 @@ document.getElementById('equation').addEventListener('change', function() {
         replaceVar(strlower);
         break;
 
+      case 2: //2 ise otomatik olarak 2 değişkeni seçiyor
+        document.getElementById('TwoVariableRB').click();
+        replaceVar(strlower);
+        break;
+
       default:
-        //3 veya 4 değilse
-        if (varNum < 3) {
-          //3'ten küçükse iki değişkeni seçiyor
-          document.getElementById('TwoVariableRB').click();
-          replaceVar(strlower);
+        if (varNum < 2) {
+          alert("Değişken sayısı 2'den küçük olamaz");
         } else if (varNum > 4) {
           //4'ten büyükse yanlış giriş uyarısı veriyor
-          alert('Invalid input');
+          alert("Değişken sayısı 4'den fazla girilemez");
         }
     }
   } else {
-    alert('Invalid input');
+    alert('Sayı girilemez');
   }
 });
 
