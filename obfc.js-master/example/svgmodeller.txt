@@ -1,0 +1,21 @@
+model 1  (yuvarlak)
+ <path fill="none" stroke="black" d="
+		   M 210 100 
+		   q 25 25 0 50
+		   
+		   a 50,35 0,0,0  60,-25
+		   a 50,35 0,0,0 -60,-25
+		    z
+		   "/>
+
+
+model 2  (düz hat>
+
+ <path fill="none" stroke="black" d="
+		   M 210 100 
+		   q 25 25 0 50
+		   h 35
+		   a 180,70 0,0,0  25,-25
+		   a 180,70 0,0,0 -25,-25
+		   h -35 z
+		   "/>

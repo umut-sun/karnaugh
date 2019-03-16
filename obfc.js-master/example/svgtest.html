@@ -1,0 +1,102 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" type="text/css" href="layout.css">
+    <script src="obfc.js"></script>
+    <title>obfc.js Example</title>
+</head>
+<body>
+    <div class="container">
+        <div class="right">
+            <div id="desc"></div>
+            <div id="test"></div>
+        </div>
+        <div class="left">
+			<svg height="900" width="450">
+  
+
+<!-- <path fill="none" stroke="red"
+    d="M 10,30
+       A 20,20 0,0,1 50,30
+       A 20,20 0,0,1 90,30
+       Q 90,60 50,90
+       Q 10,60 10,30 z" />
+	   -->
+	   
+	   
+	   <path fill="none" stroke="red"
+        d="M 10,10
+           L 90,90
+           V 10
+           H 50" />
+
+  <!-- LineTo commands in relative coordinates -->
+  <path fill="none" stroke="red"
+        d="M 110,10
+           l 80,80
+           v -80
+           h -40" />	
+		   
+		   <path fill="none" stroke="black" d="
+		   M 210 100 
+		   q 25 25 0 50
+		   h 35
+		   a 180,70 0,0,0  25,-25
+		   a 180,70 0,0,0 -25,-25
+		   h -35 z
+		   "/>
+		   
+		   <path fill="none" stroke="black" d="
+		   M 210 200 
+		   q 25 25 0 50
+		   a 50,35 0,0,0  60,-25
+		   a 50,35 0,0,0 -60,-25
+		   z
+		   "/>
+		  <!--s 30 ,-25 0,-50
+		  c 30,0 50,-80 0,-50
+		  " />
+		    q(uzunluğu,büküm konumu,+ olacak x,+ olacak y
+				a(sola uzunluğu,aşağı uzunluğu,x eksenine göre elipsin derecesi,small arc 0 large arc 1,saatyönü 1 tersi 0,gideceği x,gideceği y)	-->
+</svg>
+            
+        </div>
+    </div>
+
+    <script>
+        prepare_SVG("demo");
+        free_write("Operation Symbols", 20, "bold", 350, 10);
+        var object1 = add_theObject(new Process(75, 60, 1, "Process", 12));
+        var object2 = add_theObject(new PredefinedProcess(250, 60, 1, "Predefined Process", 10));
+        var object3 = add_theObject(new AlternateProcess(425, 60, 1, "Alternate Process", 12));
+        var object4 = add_theObject(new Delay(600, 60, 1, "Delay", 12));
+        var object5 = add_theObject(new Preparation(75, 160, 1, "Preparation", 12));
+        var object6 = add_theObject(new ManualOperation(250, 160, 1, "Manual Operation", 10));
+        free_write("Branching and Control of Flow Symbols", 20, "bold", 350, 230);
+        var object7 = add_theObject(new Terminal(75, 320, 1, "Terminal", 12));
+        var object8 = add_theObject(new Decision(250, 320, 1, "Decision", 10));
+        var object9 = add_theObject(new Connector(375, 320, 1, "A", 12, "<h2>Connector (Inspection)</h2>"));
+        var object10 = add_theObject(new OffPage_Connector(475, 320, 1, "D", 12, "<h2>Off-Page Connector</h2>"));
+        var object11 = add_theObject(new OR(575, 320, 1, "<h2>OR</h2>"));
+        var object12 = add_theObject(new SummingJunction(675, 320, 1, "<h2>Summing Junction</h2>"));
+        free_write("Input and Output Symbols", 20, "bold", 350, 410);
+        var object13 = add_theObject(new Data(75, 470, 1, "Data", 12));
+        var object14 = add_theObject(new Document(250, 470, 1, "Document", 12));
+        var object15 = add_theObject(new MultiDocument(425, 470, 1, "Multi - Document", 12));
+        var object16 = add_theObject(new Display(600, 470, 1, "Display", 12));
+        var object17 = add_theObject(new ManualInput(75, 570, 1, "Manual Input", 12));
+        var object18 = add_theObject(new Card(250, 570, 1, "Card", 12));
+        <!--var object19 = add_theObject(new PunchedTape(425, 570, 1, "Punched Tape", 12));-->
+        free_write("File and Information Storage Symbols", 20, "bold", 350, 640);
+        var object20 = add_theObject(new StoredData(75, 700, 1, "Stored Data", 12));
+        var object21 = add_theObject(new MagneticDisk(250, 700, 1, "Magnetic Disk", 10));
+        var object22 = add_theObject(new DirectAccess(425, 700, 1, ["Direct", "Access", "Storage"], 10, "<h2>Direct Access - Storage</h2>"));
+        var object23 = add_theObject(new InternalStorage(600, 700, 1, ["Internal", "Storage"], 10, "<h2>Internal Storage</h2>"));
+        var object24 = add_theObject(new MagneticTape(75, 800, 1, ["Magnetic", "Tape"], 8, "<h2>Sequential Access Storage - Magnetic Tape</h2>"));
+        var object26 = add_theObject(new Ve(600, 570, 1, "Ve", 12));
+		var object27=add_theObject(new Veya(425,570,1,"Veya",12));
+    </script>
+
+</body>
+</html>
